@@ -1,0 +1,48 @@
+
+1. How to build this ftp server?
+0) #tar -zvxf ftp_server.tar.gz
+1) Just modify config.h and ftp_usrs_mgnt.ph to set where do you 
+   want to put your file of users' infomation.
+2) #make
+3) #./ftp_server
+	or
+   #./ftp_server [port]
+4) enjoy :-)
+
+2. How to stop the server? 
+	#killall -9 ftp_server
+
+3. How to add a ftp user?
+1) The easiest way is to use perl script ftp_addu.pl like this:
+	./ftp_addu.pl -u username -p passwd -d <home directory> -l level
+	<home directory> 
+		It is the directory user works after login, and the user 
+		can't access upper directories.
+	<level>
+        	level is a number from 0 to 3 which tells the user's power.
+		level 0 -- list
+		level 1 -- list & download
+		level 2 -- list & upload
+		level 3 -- list & download & upload
+2) If you can't work with the script, edit file userinfo yourself please.
+   Its format is:
+	username:crypted password:home directory:level
+   You can get crypted password from adding an temporary user to your system.
+   Do it like this,
+	#useradd tmpuser
+	#passwd tmpuser
+	<---enter the password you want to set.
+        #cat /etc/shadow | grep ^tmpuser: | awk -F\: '{print $2}'
+	then copy the output characters as crypted password in the file userinfo.
+
+4 How to delete a ftp user?
+1) #./ftp_delu.pl -u username
+2) If you can't work with the script, edit file userinfo yourself please. Just
+   find and delete the line begin with username:, and it will work.
+
+5 Examples
+  You can find a file named userinfo which contains 4 users:
+  	anonymous/anonymous, guest/guest, icymoon/icymoon, aleph/aleph 
+  with 4 different level, from 0 to 3.
+  You can test the program with these users. Of course you can also add or delete 
+  users yourself. Thank you.
